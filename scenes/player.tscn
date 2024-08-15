@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://crf103cume3xk"]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_43ffj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1nk3v"]
+
+[sub_resource type="CurveTexture" id="CurveTexture_aygvt"]
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 14
+collision_mask = 15
+script = ExtResource("1_43ffj")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1nk3v")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(0, 3.57628e-07)
+scale = Vector2(0.078125, 20)
+texture = SubResource("CurveTexture_aygvt")
+
+[node name="ShootTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]

@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://g40nth0y5gbd"]
+
+[ext_resource type="Script" path="res://scripts/enemy/enemy.gd" id="1_47wyo"]
+[ext_resource type="Script" path="res://scripts/enemy/enemy_nav.gd" id="2_1wl05"]
+[ext_resource type="Script" path="res://scripts/enemy/enemy_aggro.gd" id="3_a84do"]
+[ext_resource type="Script" path="res://scripts/enemy/enemy_stun.gd" id="4_6trr5"]
+[ext_resource type="Script" path="res://scripts/enemy/enemy_hit.gd" id="5_d601x"]
+
+[sub_resource type="CurveTexture" id="CurveTexture_5wu08"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1c8ky"]
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_47wyo")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(0.078125, 20)
+texture = SubResource("CurveTexture_5wu08")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1c8ky")
+
+[node name="Navigation" type="Node2D" parent="."]
+script = ExtResource("2_1wl05")
+
+[node name="NavigationAgent" type="NavigationAgent2D" parent="Navigation"]
+
+[node name="NavigationTimer" type="Timer" parent="Navigation"]
+wait_time = 0.1
+autostart = true
+
+[node name="Vision" type="RayCast2D" parent="Navigation"]
+collision_mask = 12
+
+[node name="Aggro" type="Node2D" parent="."]
+script = ExtResource("3_a84do")
+
+[node name="AggroTimer" type="Timer" parent="Aggro"]
+wait_time = 0.1
+
+[node name="Stun" type="Node2D" parent="."]
+script = ExtResource("4_6trr5")
+
+[node name="StunTimer" type="Timer" parent="Stun"]
+wait_time = 0.721
+one_shot = true
+
+[node name="Hit" type="Node2D" parent="."]
+script = ExtResource("5_d601x")
+
+[node name="HitTimer" type="Timer" parent="Hit"]
+wait_time = 0.3
+one_shot = true
+
+[node name="ShootTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Navigation/NavigationTimer" to="Navigation" method="_on_navigation_timer_timeout"]
+[connection signal="timeout" from="Aggro/AggroTimer" to="Aggro" method="_on_aggro_timer_timeout"]
+[connection signal="timeout" from="Stun/StunTimer" to="." method="_on_stun_timer_timeout"]
+[connection signal="timeout" from="Hit/HitTimer" to="Hit" method="_on_hit_timer_timeout"]
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
