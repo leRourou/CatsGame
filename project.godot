@@ -20,7 +20,9 @@ config/icon="res://icon.svg"
 EnemyUtils="*res://scripts/utils/enemy_utils.gd"
 PlayerUtils="*res://scripts/utils/player_utils.gd"
 ScenesManager="*res://scripts/utils/scenes_manager.gd"
-MazeGenerator="*res://scripts/utils/maze_generator.gd"
+MazeGenerator="*res://scripts/maze/maze_generator.gd"
+RoomManager="*res://scripts/maze/room_manager.gd"
+ProbaUtils="*res://scripts/utils/proba_utils.gd"
 
 [layer_names]
 
