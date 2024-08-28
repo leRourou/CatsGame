@@ -29,7 +29,7 @@ func shoot():
 	Bullet.instanciate(self, (get_global_mouse_position() - global_position).normalized())
 	shoot_timer.start(TIME_BETWEEN_SHOOTS)
 
-func move(delta):
+func move(_delta):
 	var direction = Vector2.ZERO
 	if Input.is_action_pressed("ui_up"):
 		direction.y -= 1

@@ -17,11 +17,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-EnemyUtils="*res://scripts/utils/enemy_utils.gd"
 ScenesManager="*res://scripts/utils/scenes_manager.gd"
 MazeGenerator="*res://scripts/maze/maze_generator.gd"
+EnemyUtils="*res://scripts/utils/enemy_utils.gd"
 ProbaUtils="*res://scripts/utils/proba_utils.gd"
-PatternUtils="*res://scripts/maze/pattern_utils.gd"
 
 [input]
 

@@ -12,25 +12,26 @@ var maze: Maze
 
 func _ready():
 	add_maze()
+	player.position = Vector2(16 * 32, 16 * 32)
 	add_child(player)
 	instanciate_ennemies()
 
-func _process(delta):
+func _process(_delta):
 	camera_follow_player()
 
 func add_maze():
-	var maze = MazeGenerator.generate()
+	maze = MazeGenerator.generate()
 	var rooms: Array[Room] = maze.get_rooms()
 	var room_scene = roomPath.instantiate()
 	var repo = room_scene.get_child(0)
 	for room in rooms:
-		var single_room_instance = repo.get_normal_room(room.get_pattern())
-		var pos =  room.get_position_in_maze() * 16 * 64
-		print("-----------")
-		print(room)
-		print(room.get_pattern())
-		print(single_room_instance)
-		print("-----------")
+		var single_room_instance = repo.get_normal_room(room.get_pattern().get_type())
+		var pos = room.get_position_in_maze() * 16 * 64
+		# print("-----------")
+		# print(room)
+		# print(room.get_pattern())
+		# print(single_room_instance)
+		# print("-----------")
 		single_room_instance.position = pos
 		maze_rooms.add_child(single_room_instance)
 	print(maze)

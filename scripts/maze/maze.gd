@@ -1,18 +1,18 @@
 class_name Maze extends Node
 static var rng = RandomNumberGenerator.new()
 
-enum SideTile { TOP, BOTTOM, LEFT, RIGHT }
+enum SideTile {TOP, BOTTOM, LEFT, RIGHT}
 
-var size: int
+var _size: int
 var _rooms: Array[Room]
 var tiles: Array[Vector2]
 var _placable_patterns: Array
 
 func _init(size: int):
-	self.size = size
+	self._size = size
 	_rooms = []
 	tiles = []
-	_placable_patterns = PatternUtils.Patterns.values()
+	_placable_patterns = Pattern.Type.values()
 	for y in range(size):
 		for x in range(size):
 			tiles.append(Vector2(x, y))
@@ -27,19 +27,19 @@ func get_placable_patterns():
 	return _placable_patterns
 
 # Returns the first position the pattern can be placed
-func get_first_position_pattern(pattern: PatternUtils.Patterns, is_side = null, rand_start_pos = true):
-	if (pattern == PatternUtils.Patterns.SINGLE):
+func get_first_position_pattern(pattern: Pattern.Type, is_side = null, rand_start_pos = true):
+	if (pattern == Pattern.Type.SINGLE):
 		if (is_side):
 			return get_empty_side_tile(is_side)
 		return get_empty_rand_tile()
 		
-	var pattern_tiles = PatternUtils.get_pattern_tiles(pattern)
+	var pattern_tiles = Pattern.get_pattern_from_type(pattern)
 	var cursor = Vector2.ZERO
 	if (rand_start_pos):
 		cursor = get_empty_rand_tile()
 	for tile in tiles:
 		if (rand_start_pos):
-			tile = Vector2(int(tile.x + cursor.x) % size , int(tile.x + cursor.x) % size)
+			tile = Vector2(int(tile.x + cursor.x) % _size, int(tile.x + cursor.x) % _size)
 		var can_place = true
 		for pattern_tile in pattern_tiles:
 			var pos = tile + pattern_tile
@@ -52,8 +52,8 @@ func get_first_position_pattern(pattern: PatternUtils.Patterns, is_side = null, 
 	return null
 
 # Removes patterns that can be placed in the maze
-func remove_placable_patterns(pattern: PatternUtils.Patterns):
-	var patterns_to_remove = PatternUtils.get_patterns_to_remove(pattern)
+func remove_placable_patterns(pattern_type: Pattern.Type):
+	var patterns_to_remove = PatternInfos.get_patterns_to_remove(pattern_type)
 	for pattern_to_remove in patterns_to_remove:
 		_placable_patterns.erase(pattern_to_remove)
 
@@ -62,21 +62,21 @@ func get_rand_tile():
 	return tiles[index]
 
 func get_side_tile(side_tile: SideTile) -> Vector2:
-	var rand_side = rng.randi_range(0, size - 1)
+	var rand_side = rng.randi_range(0, _size - 1)
 	match side_tile:
 		SideTile.TOP:
 			return Vector2(rand_side, 0)
 		SideTile.BOTTOM:
-			return Vector2(rand_side, size - 1)
+			return Vector2(rand_side, _size - 1)
 		SideTile.LEFT:
 			return Vector2(0, rand_side)
 		SideTile.RIGHT:
-			return Vector2(size - 1, rand_side)
+			return Vector2(_size - 1, rand_side)
 	return Vector2()
 
 # Returns the total of tiles of the maze
 func get_tile_count():
-	return size * size
+	return _size * _size
 
 # Returns the amount of empty tiles
 func get_empty_tiles_count():
@@ -103,7 +103,7 @@ func is_tile_empty(pos: Vector2):
 # Add a room to the maze
 func add_room(room: Room) -> bool:
 	_rooms.append(room)
-	for tile in room.get_tiles():
+	for tile in room.get_pattern().get_tiles():
 		tiles.erase(room.get_position_in_maze() + tile)
 	return true
 
@@ -116,8 +116,8 @@ func get_room_at_tile(pos: Vector2) -> Room:
 
 func _to_string() -> String:
 	var output = ""
-	for y in range(size):
-		for x in range(size):
+	for y in range(_size):
+		for x in range(_size):
 			var pos = Vector2(x, y)
 			var room = get_room_at_tile(pos)
 			if room:

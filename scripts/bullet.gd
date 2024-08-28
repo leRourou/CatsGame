@@ -1,7 +1,7 @@
 class_name Bullet extends Area2D
 const bulletPath = preload("res://scenes/bullet.tscn")
 
-const SPEED = 500
+const SPEED = 1500
 const STUN_TIME = 0.0
 const DAMAGES = 120
 const MAX_DISTANCE = 1000
@@ -52,6 +52,6 @@ func _on_body_entered(body):
 		body.hitted(self)
 		remove_bullet()
 
-func _on_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+func _on_body_shape_entered(_body_rid, body, _body_shape_index, _local_shape_index):
 	if (body is TileMap):
 		remove_bullet()
