@@ -53,16 +53,13 @@ func set_state(state_to_set: States):
 			set_color(Color(0,0,1))
 
 func get_distance_to_player() -> float:
-	return position.distance_to(PlayerUtils.get_player().position)
+	return position.distance_to(Player.get_player().position)
 
 func set_color(color: Color):
 	sprite.self_modulate = color
 
 func shoot():
-	var bullet_to_shoot = bulletPath.instantiate()
-	add_child(bullet_to_shoot)
-	bullet_to_shoot.global_position = position
-	bullet_to_shoot.direction = (PlayerUtils.get_player().position - position).normalized()
+	Bullet.instanciate(self, (Player.get_player().position - position).normalized())
 	shoot_manager.start(2)
 
 func move_to_player():
@@ -71,7 +68,7 @@ func move_to_player():
 	move_and_slide()
 
 func hitted(bullet: Bullet):
-	if (bullet.launcher is Player):
+	if (bullet.get_launcher() is Player):
 		hit_manager.hitted(bullet)
 
 func kill():

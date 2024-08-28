@@ -1,6 +1,6 @@
 class_name EnemyNav extends Node2D
 
-@onready var player:Player = PlayerUtils.get_player()
+@onready var player:Player = Player.get_player()
 @onready var nav_agent = $NavigationAgent as NavigationAgent2D
 @onready var vision = $Vision as RayCast2D
 

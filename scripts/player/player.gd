@@ -1,10 +1,19 @@
 class_name Player extends CharacterBody2D
-const bulletPath = preload("res://scenes/bullet.tscn")
+const character_scene = preload("res://scenes/player.tscn")
 
-const MOVE_SPEED = 500
+static var player: Player
+
+const SPEED = 500
 const TIME_BETWEEN_SHOOTS = 0.25
 
+var current_speed = 0
+
 @onready var shoot_timer := $ShootTimer as Timer
+
+static func get_player() -> Player:
+	if (!player):
+		player = character_scene.instantiate()
+	return player
 
 func _physics_process(delta):
 	move(delta)
@@ -17,27 +26,26 @@ func can_shoot():
 
 func shoot():
 	if (!can_shoot()): return
-	var bullet_to_shoot = bulletPath.instantiate()
-	add_child(bullet_to_shoot)
-	bullet_to_shoot.global_position = position
-	bullet_to_shoot.direction = (get_global_mouse_position() - global_position).normalized()
+	Bullet.instanciate(self, (get_global_mouse_position() - global_position).normalized())
 	shoot_timer.start(TIME_BETWEEN_SHOOTS)
 
-func move(_delta):
-	velocity = Vector2(0,0)
+func move(delta):
+	var direction = Vector2.ZERO
 	if Input.is_action_pressed("ui_up"):
-		velocity.y -= 1
+		direction.y -= 1
 	if Input.is_action_pressed("ui_down"):
-		velocity.y += 1
+		direction.y += 1
 	if Input.is_action_pressed("ui_right"):
-		velocity.x += 1
+		direction.x += 1
 	if Input.is_action_pressed("ui_left"):
-		velocity.x -= 1
-	velocity = velocity * MOVE_SPEED
+		direction.x -= 1
+	
+	velocity = direction * SPEED
+	
 	move_and_slide()
 
 func allow_shoot():
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_pressed("Shoot"):
 		shoot()
 
 func _on_shoot_timer_timeout():

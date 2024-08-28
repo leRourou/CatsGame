@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmclpf5ercao0"]
 
-[ext_resource type="Script" path="res://scripts/player/bullet.gd" id="1_qerra"]
+[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_qerra"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ow2v6"]
 radius = 7.07107
@@ -8,7 +8,8 @@ radius = 7.07107
 [sub_resource type="SphereMesh" id="SphereMesh_essdl"]
 
 [node name="Bullet" type="Area2D"]
-z_index = -1
+modulate = Color(1, 0.239216, 1, 1)
+z_index = 1
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_qerra")

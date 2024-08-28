@@ -16,7 +16,7 @@ func remaining_hit_time():
 
 func hitted(bullet: Bullet):
 	hit_position = enemy.position
-	knockback_position = enemy.position + bullet.direction * bullet.KNOCKBACK
+	knockback_position = enemy.position + bullet.get_direction() * bullet.KNOCKBACK
 	if (bullet.STUN_TIME > 0):
 		enemy.stun_manager.stun(bullet.STUN_TIME)
 	enemy.set_state(enemy.States.HITTED)
